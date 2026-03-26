@@ -1,0 +1,40 @@
+name: engineering
+repositories:
+  - punt-labs/ethos
+  - punt-labs/biff
+  - punt-labs/quarry
+  - punt-labs/beadle
+  - punt-labs/vox
+  - punt-labs/lux
+  - punt-labs/punt-kit
+  - punt-labs/z-spec
+  - punt-labs/prfaq
+members:
+  - identity: jfreeman
+    role: ceo
+  - identity: claude
+    role: coo
+  - identity: bwk
+    role: go-specialist
+  - identity: mdm
+    role: cli-specialist
+  - identity: djb
+    role: security-engineer
+  - identity: adb
+    role: infra-engineer
+collaborations:
+  - from: coo
+    to: ceo
+    type: reports_to
+  - from: go-specialist
+    to: coo
+    type: reports_to
+  - from: cli-specialist
+    to: coo
+    type: reports_to
+  - from: security-engineer
+    to: coo
+    type: reports_to
+  - from: infra-engineer
+    to: coo
+    type: reports_to
