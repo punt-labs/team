@@ -22,6 +22,8 @@ members:
     role: security-engineer
   - identity: adb
     role: infra-engineer
+  - identity: rmh
+    role: python-specialist
 collaborations:
   - from: coo
     to: ceo
@@ -36,5 +38,8 @@ collaborations:
     to: coo
     type: reports_to
   - from: infra-engineer
+    to: coo
+    type: reports_to
+  - from: python-specialist
     to: coo
     type: reports_to
