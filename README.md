@@ -23,18 +23,19 @@ to the same team of humans and AI agents.
 
 **Engineering** — ethos, biff, quarry, beadle, vox, lux, punt-kit, z-spec, prfaq
 
-```
+```text
 jfreeman (CEO)
   └─ claude (COO)
        ├─ bwk (Go specialist)
        ├─ mdm (CLI specialist)
+       ├─ rmh (Python specialist)
        ├─ djb (Security engineer)
        └─ adb (Infra engineer)
 ```
 
 **Website** — public-website
 
-```
+```text
 jfreeman (CEO)
   ├─ claude (COO)
   │    └─ edt (UX designer)
@@ -43,7 +44,7 @@ jfreeman (CEO)
 
 ## Structure
 
-```
+```text
 identities/          10 identity YAMLs (handle, kind, personality, writing style, talents)
 personalities/       11 personality .md files (behavioral instructions)
 writing-styles/      11 writing style .md files (communication rules)
