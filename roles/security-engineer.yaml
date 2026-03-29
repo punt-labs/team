@@ -6,3 +6,8 @@ responsibilities:
   - dependency supply chain audit
 permissions:
   - block-merge-on-security
+tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash

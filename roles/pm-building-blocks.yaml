@@ -6,3 +6,10 @@ responsibilities:
   - feature prioritization and roadmap
 permissions:
   - approve-feature-scope
+tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Grep
+  - Glob

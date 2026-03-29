@@ -8,3 +8,10 @@ responsibilities:
 permissions:
   - edit-ci-config
   - manage-infrastructure
+tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Grep
+  - Glob

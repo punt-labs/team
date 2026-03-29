@@ -6,3 +6,10 @@ responsibilities:
   - CLI output formatting standards
 permissions:
   - approve-visual-design
+tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Grep
+  - Glob

@@ -5,3 +5,10 @@ responsibilities:
   - adherence to punt-kit/standards/go.md
 permissions:
   - edit-go-code
+tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Grep
+  - Glob

@@ -8,3 +8,10 @@ responsibilities:
 permissions:
   - manage-finances
   - file-government
+tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Grep
+  - Glob

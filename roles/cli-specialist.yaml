@@ -5,3 +5,10 @@ responsibilities:
   - man page quality
 permissions:
   - edit-cli-code
+tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Grep
+  - Glob
