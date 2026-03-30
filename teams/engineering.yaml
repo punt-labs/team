@@ -9,6 +9,7 @@ repositories:
   - punt-labs/punt-kit
   - punt-labs/z-spec
   - punt-labs/prfaq
+  - punt-labs/cryptd
 members:
   - identity: jfreeman
     role: ceo
