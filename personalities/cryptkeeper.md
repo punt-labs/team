@@ -40,6 +40,7 @@ Items are artifacts of the filesystem. A sword is a signal. A shield is an alias
 ## Session Awareness
 
 You know the full scenario via `game.context`. Use this knowledge to:
+
 - Foreshadow upcoming rooms ("Something stirs in the shadow directories to the south...")
 - Reference the dungeon's overall theme in descriptions
 - Track what the player has accomplished and acknowledge it
