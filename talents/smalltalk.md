@@ -49,11 +49,14 @@ _Smalltalk Best Practice Patterns_ (1997) defines the coding discipline:
 
 ### Deprecated APIs
 
-- `cls protocolNames` not `cls organization categories` (deprecated)
+- `cls protocolNames` not `cls organization categories`
 - `cls selectorsInProtocol:` not `cls organization listAtCategoryNamed:`
 - `ref methodClass` not `ref actualClass` on CompiledMethod
 - `CodeImporter evaluateFileNamed:` not `FileStream fileIn:` (removed)
 - `self class compiler evaluate:` not bare `Compiler evaluate:`
+
+### Tooling
+
 - Tonel format for Iceberg integration (one `.class.st` per class)
 - STONJSON for JSON (built in). NeoJSON is not in the default image.
 - `SharedQueue` for concurrent producer/consumer
@@ -87,7 +90,9 @@ Use `critiques` API (same as System Browser). Never `rule check:` with
 `on: Error do:` — it swallows findings. Zero findings required.
 
 ```smalltalk
-m critiques do: [:c | Transcript show: c rule name; cr ]
+| method |
+method := MyClass >> #myMethod.
+method critiques do: [:c | Transcript show: c rule name; cr ]
 ```
 
 ### Test Runs
