@@ -47,14 +47,58 @@ _Smalltalk Best Practice Patterns_ (1997) defines the coding discipline:
 
 ## Pharo 12
 
-- `cls protocolNames` not `cls organization categories` (deprecated)
+### Deprecated APIs
+
+- `cls protocolNames` not `cls organization categories`
 - `cls selectorsInProtocol:` not `cls organization listAtCategoryNamed:`
 - `ref methodClass` not `ref actualClass` on CompiledMethod
 - `CodeImporter evaluateFileNamed:` not `FileStream fileIn:` (removed)
 - `self class compiler evaluate:` not bare `Compiler evaluate:`
+
+### Tooling
+
 - Tonel format for Iceberg integration (one `.class.st` per class)
 - STONJSON for JSON (built in). NeoJSON is not in the default image.
-- `SharedQueue` for concurrent producer/consumer (check deprecation status)
+- `SharedQueue` for concurrent producer/consumer
+
+### Class Definition (fluid syntax — mandatory)
+
+The old `subclass:instanceVariableNames:classVariableNames:package:` is
+DEPRECATED. Always use the fluid syntax:
+
+```smalltalk
+(Object << #MyClass
+  slots: { #instVar1. #instVar2 };
+  package: 'MyPackage') install.
+```
+
+### Method Compilation
+
+Always `compile:classified:` — never bare `compile:`. Protocols:
+`accessing`, `json`, `tests`, `testing`, `printing`, `models`,
+`instance creation`, `converting`, `private`. No `as yet unclassified`.
+
+### JSON Serialization
+
+No reflection (`instVarNamed:`, `allInstVarNames`). Each class implements
+`asJson`/`fromJson:` with explicit accessors. Use collecting parameter
+pattern for classes with many fields.
+
+### Lint
+
+Use `critiques` API (same as System Browser). Never `rule check:` with
+`on: Error do:` — it swallows findings. Zero findings required.
+
+```smalltalk
+| method |
+method := MyClass >> #myMethod.
+method critiques do: [:c | Transcript show: c rule name; cr ]
+```
+
+### Test Runs
+
+Only run project-scoped tests. Never the full Pharo test suite — it
+leaks watchdog processes.
 
 ## Threading
 
