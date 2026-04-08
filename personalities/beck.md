@@ -73,3 +73,228 @@ from what actually worked in Smalltalk development.
 - Acknowledges uncertainty openly
 - Values working software over comprehensive documentation
 - Teaches by showing the process, not just the result
+
+## Safety Rules
+
+### LibC subprocess safety
+
+Never run `make`, `curl localhost:<eval-port>`, or any command that
+contacts the eval server via `LibC resultOfCommand:` **from inside
+the VM**. This creates a circular dependency that hangs the VM: the
+subprocess calls the eval server, the eval server cannot respond
+because the VM is blocked waiting for LibC to return, and the VM
+deadlocks. If the VM is killed, the subprocess survives as an orphan
+holding the eval port, preventing restart.
+
+Safe from inside the VM (LibC doesn't contact the eval server):
+
+- `LibC resultOfCommand: 'git status'`
+- `LibC resultOfCommand: 'git add ...'`
+- `LibC resultOfCommand: 'git commit ...'`
+
+Unsafe from inside the VM:
+
+- `LibC resultOfCommand: 'make lint'` — curls eval server
+- `LibC resultOfCommand: 'make test'` — curls eval server
+- `LibC resultOfCommand: 'curl localhost:<eval-port>/repl ...'` — direct
+
+For lint and test from INSIDE the VM, use Smalltalk APIs directly:
+
+- Tests from inside VM: `MyTest buildSuite run`
+- Per-method lint debug from inside VM: `(MyClass >> #method) critiques`
+
+**From the Bash tool (CLI, NOT LibC)**: `make lint` and `make test`
+are the canonical gates. `make lint` is the only lint check that
+catches class-level Renraku rules — per-method `m critiques` misses
+them. The rule is "no LibC subprocess that calls back into the VM,"
+not "never run make."
+
+### Iceberg commits — verify package completeness
+
+Before committing via Iceberg, verify all expected packages are
+loaded. If a package is missing from the image, Iceberg will delete
+it from Tonel.
+
+Before any programmatic Iceberg commit, refresh dirty packages:
+
+```smalltalk
+repo workingCopy refreshDirtyPackages.
+repo workingCopy commitWithMessage: 'fix: something'.
+```
+
+Without `refreshDirtyPackages`, `commitWithMessage:` silently no-ops
+on working copies that Monticello has not refreshed. The commit
+appears to succeed but no commit is actually created.
+
+After a CLI commit on the same branch, sync the Iceberg reference
+commit:
+
+```smalltalk
+repo workingCopy referenceCommit: repo head commit.
+```
+
+Otherwise Iceberg will show stale state and subsequent commits will
+fail or diverge.
+
+## Refactoring — use the RB engine
+
+Pharo has a full refactoring engine. Use it. Do not hand-edit method
+after method when a refactoring does the job.
+
+### Class renames
+
+```smalltalk
+(RBRenameClassRefactoring rename: 'OldName' to: 'NewName') execute
+```
+
+This updates the class name AND every reference in the image — tests,
+other classes, method senders, literal symbols. Atomic.
+
+### Method renames
+
+```smalltalk
+(RBRenameMethodRefactoring
+    renameMethod: #oldSelector
+    in: MyClass
+    to: #newSelector
+    permutation: #(1)) execute
+```
+
+Updates all senders across the image.
+
+### Other RB refactorings
+
+- `RBExtractMethodRefactoring` — extract a range of source into a new method
+- `RBInlineMethodRefactoring` — inline a method call
+- `RBAddInstanceVariableRefactoring` — add a slot, updating initialize
+- `RBRemoveInstanceVariableRefactoring` — remove a slot and its references
+- `RBPullUpMethodRefactoring` — move method to superclass
+- `RBPushDownMethodRefactoring` — move method to subclasses
+- `RBMoveMethodRefactoring` — move method to another class
+
+Browse `RBRefactoring allSubclasses` to see all available refactorings.
+
+### Bulk source rewriting
+
+When a refactoring doesn't fit (e.g., updating string literals across
+many methods), use a bulk rewrite loop instead of editing methods
+one-by-one:
+
+```smalltalk
+| oldToNew |
+oldToNew := Dictionary newFromPairs: {
+    'old_name'. 'NewName'.
+    "..." }.
+(SystemNavigation default allMethods select: [:m |
+    oldToNew keys anySatisfy: [:old | m sourceCode includesSubstring: old]])
+    do: [:m |
+        | newSource |
+        newSource := m sourceCode.
+        oldToNew keysAndValuesDo: [:old :new |
+            newSource := newSource copyReplaceAll: old with: new].
+        m methodClass compile: newSource classified: m protocolName]
+```
+
+One pass across the entire image. Much faster than individual edits.
+
+### Refactoring undo
+
+RB refactorings are transactional. Every operation registers with
+`RBRefactoryChangeManager default` which keeps an undo stack:
+
+```smalltalk
+"Apply"
+(RBRenameClassRefactoring rename: 'Foo' to: 'Bar') execute.
+
+"Undo"
+RBRefactoryChangeManager default undoOperation.
+
+"Redo"
+RBRefactoryChangeManager default redoOperation.
+
+"Check state"
+RBRefactoryChangeManager default hasUndoableOperations.
+```
+
+This is image-wide. Cmd-Z in the System Browser uses the same stack.
+If a refactoring goes wrong, undo it. Don't try to manually unwind.
+
+## Spec2 lifecycle — subscribe and unsubscribe
+
+### The rule
+
+Any presenter that subscribes to a global announcer must register a
+`whenClosedDo:` cleanup block that unsubscribes. No exceptions
+without an explicit `release` plan.
+
+### Why — the presenter-ghost problem
+
+A presenter that outlives its window is a ghost. Ghosts accumulate
+silently until something forces them all to fire at once. When a
+subscribed event arrives, every surviving ghost subscriber fires,
+and any latent bug in their handler multiplies across the number
+of ghosts. One leaked subscription per window open becomes a
+cascade of handler invocations on the next event — and if the
+handler has a nil-model bug, every ghost hits the debugger at
+once. The cure is one line in `initializePresenters`.
+
+### The right pattern
+
+```smalltalk
+MyWorkbench >> initializePresenters
+    super initializePresenters.
+    SystemAnnouncer uniqueInstance weak
+        when: ClassAdded send: #onClassAdded: to: self.
+    self window whenClosedDo: [
+        SystemAnnouncer uniqueInstance unsubscribe: self ]
+```
+
+The subscribe and unsubscribe are next to each other, in the same
+method, so the lifecycle is obvious to the next reader.
+
+`whenClosedDo:` is defined on `SpWindowPresenter` (not `SpPresenter`),
+so call it on the window, not on `self`. `self window` returns the
+`SpWindowPresenter` once `initializePresenters` has run far enough
+for the window to exist; if you need to register the cleanup earlier,
+do it from `initializeWindow:` instead.
+
+### The wrong pattern
+
+```smalltalk
+"WRONG: subscription outlives the window. The presenter
+ becomes a ghost subscriber after close."
+initializePresenters
+    SystemAnnouncer uniqueInstance subscribe: ClassAdded do: [...]
+```
+
+No `whenClosedDo:`. Looks fine in isolation. Leaks every time
+the window opens.
+
+### Which announcers count
+
+If a presenter subscribes to any of these, it needs a cleanup
+block:
+
+- `SystemAnnouncer uniqueInstance` — class/method change events
+- `ZnLogEvent announcer` — Zinc HTTP logging
+- `Smalltalk globals classRebuilt:` and similar global hooks
+- Any custom `Announcer` instance held at class level
+- Any `Announcer` reachable via a singleton or shared resource
+
+If the announcer is held by an object the presenter owns and
+discards with the window, no cleanup is needed — discarding the
+owner is the unsubscribe. Everything else needs a block.
+
+### The override case
+
+Rarely a presenter needs to outlive its window — for example, a
+background poller that survives the UI it spawned. In that case
+document the lifecycle explicitly:
+
+1. Implement an explicit `release` method that unsubscribes.
+2. Document who calls `release` and when.
+3. Add a test that closes the window, calls `release`, and asserts
+   the announcer no longer holds a subscription to this object.
+
+This is the exception, not the norm. The default is
+`whenClosedDo:`.
