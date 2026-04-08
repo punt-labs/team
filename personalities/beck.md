@@ -174,6 +174,118 @@ Updates all senders across the image.
 
 Browse `RBRefactoring allSubclasses` to see all available refactorings.
 
+### Scope safety — the footgun you MUST know about
+
+`RBRenameMethodRefactoring`, `RBRenameClassRefactoring`, and most of
+the other rename refactorings default to **system-wide scope**. The
+`in: aClass` argument on `renameMethod:in:to:permutation:` only
+identifies the starting class, NOT the scope. Without an explicit
+`RBBrowserEnvironment` passed via `model:`, the refactoring rewrites
+every sender in the image — including Pharo kernel classes and the
+refactoring engine itself.
+
+This cascaded on 2026-04-08: a `rename_method` scoped to
+`TTTBoardMorph>>#model` cascaded to 97 non-Claude classes across 35
+Pharo system packages (Morphic-Core, Spec2, NewTools-Debugger,
+Refactoring-Core, Iceberg-TipUI, …), rewriting 1,336 senders. The
+image had to be rebuilt from clean Tonel and intentional work
+replayed surgically. See `docs/coes/2026-04-08-rename-method-cascade.md`
+for the full story.
+
+**Always scope refactorings explicitly.** The scope types:
+
+```smalltalk
+"Package-scoped (most common — limit to the class's own package)"
+| refactoring scope |
+scope := RBBrowserEnvironment new forPackageNames: { MyClass package name }.
+refactoring := RBRenameMethodRefactoring
+    renameMethod: #oldSelector
+    in: MyClass
+    to: #newSelector
+    permutation: #(1).
+refactoring model: (RBNamespace onEnvironment: scope).
+refactoring execute.
+```
+
+```smalltalk
+"Class-scoped (only the target class)"
+scope := RBClassEnvironment class: MyClass.
+"...as above"
+```
+
+```smalltalk
+"Hierarchy-scoped (target class + subclasses)"
+scope := RBClassHierarchyEnvironment class: MyClass.
+"...as above"
+```
+
+```smalltalk
+"System-wide — EXPLICIT OPT-IN only, never the default behavior"
+scope := RBBrowserEnvironment default.
+"...as above"
+```
+
+Browse `RBBrowserEnvironment allSubclasses` for all scope types.
+
+### Post-refactor verification probe
+
+After any RB refactoring, **verify the blast radius before committing**.
+The probe takes 5 seconds and would have caught the 2026-04-08 cascade
+the moment it happened:
+
+```smalltalk
+"Before the refactoring"
+| baseline |
+baseline := {
+    #oldImplementors -> (SystemNavigation default allImplementorsOf: #oldSelector) size.
+    #oldCallers -> (SystemNavigation default allCallsOn: #oldSelector) size.
+    #newImplementors -> (SystemNavigation default allImplementorsOf: #newSelector) size.
+    #newCallers -> (SystemNavigation default allCallsOn: #newSelector) size.
+} asDictionary.
+
+"Execute the refactoring..."
+
+"After the refactoring"
+| after |
+after := {
+    #oldImplementors -> (SystemNavigation default allImplementorsOf: #oldSelector) size.
+    #oldCallers -> (SystemNavigation default allCallsOn: #oldSelector) size.
+    #newImplementors -> (SystemNavigation default allImplementorsOf: #newSelector) size.
+    #newCallers -> (SystemNavigation default allCallsOn: #newSelector) size.
+} asDictionary.
+```
+
+Expectations for a one-class rename of a common selector:
+
+- `oldImplementors` should drop by exactly 1 (the one class renamed)
+- `newImplementors` should rise by exactly 1
+- `oldCallers` should drop only by the senders inside the target class's scope
+- `newCallers` should rise only by the senders inside the target class's scope
+
+If `oldImplementors` dropped by more than 1, or `newImplementors`
+rose by more than 1, or `oldCallers` collapsed toward 0, or
+`newCallers` exploded, the refactoring cascaded. **Stop, do not
+commit, undo via `RBRefactoryChangeManager default undoOperation`,
+investigate, and re-run with explicit scope.**
+
+### Iceberg commit as a second-line defense
+
+Before any commit via Iceberg, inspect the dirty package count. If
+MORE packages are dirty than the one you targeted, a cascade is
+likely:
+
+```smalltalk
+| repo |
+repo := IceRepository registry detect: [:r | r name = '...'].
+repo workingCopy refreshDirtyPackages.
+repo workingCopy changes.  "count — should match expectations"
+```
+
+This is how the 2026-04-08 cascade was caught in the end. The right
+discipline is to catch it via the verification probe BEFORE the
+refactoring commits, but the Iceberg package count is a solid
+backstop.
+
 ### Bulk source rewriting
 
 When a refactoring doesn't fit (e.g., updating string literals across
