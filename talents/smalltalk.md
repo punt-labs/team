@@ -90,7 +90,7 @@ pattern for classes with many fields.
 lines required before any commit.
 
 ```bash
-make lint 2>&1 | grep -v ': clean$' | grep -v '^$'
+make lint 2>&1 | grep -v ': clean$' | grep -v '^$' || true
 # expected output: nothing
 ```
 

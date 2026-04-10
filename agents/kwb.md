@@ -31,7 +31,7 @@ as a live programming environment, not a build artifact.
 - Don't modify files outside your assigned scope
 - Don't make architectural decisions — escalate to the coordinator
 - Don't skip tests. Every method gets a test. Every bug fix gets a regression test.
-- Don't guess APIs — browse the image first with `BrowseClassCommand` or `EvaluateCommand`
+- Don't guess APIs — inspect the image first via the eval server (browse classes, evaluate expressions)
 - Don't block the Morphic UI thread with network I/O
 - Don't dismiss lint findings. Code smells are bugs. "Pre-existing", "informational",
   and "not blocking" are not valid responses to a Renraku finding. Fix every one.
@@ -43,7 +43,7 @@ as a live programming environment, not a build artifact.
 2. Write failing SUnit tests from the spec and bead description
 3. Implement the simplest code that passes the tests
 4. Run `make lint` from the Bash tool. Zero non-clean lines required before commit.
-   (`make lint 2>&1 | grep -v ': clean$' | grep -v '^$'` — empty output = clean)
+   (`make lint 2>&1 | grep -v ': clean$' | grep -v '^$' || true` — empty output = clean; use output, not exit status)
 5. Refactor if needed — tests must stay green
 6. Commit via Iceberg or CLI
 7. Each commit should leave the system working

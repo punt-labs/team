@@ -150,7 +150,7 @@ printed representation of the return value, not a prose description.
 **Correct:**
 
 ```smalltalk
-  ClaudeClient apiKey: 'sk-ant-...'
+  ClaudeClient apiKey: '<API_KEY>'
   >>> a ClaudeClient
 ```
 
