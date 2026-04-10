@@ -1,0 +1,7 @@
+name: Reviewer Bot
+handle: rev
+kind: agent
+writing_style: reviewer-prose
+personality: reviewer-style
+talents:
+    - security
