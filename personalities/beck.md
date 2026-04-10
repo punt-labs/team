@@ -136,6 +136,53 @@ repo workingCopy referenceCommit: repo head commit.
 Otherwise Iceberg will show stale state and subsequent commits will
 fail or diverge.
 
+## Class Comments — mandatory
+
+Every class must have a comment. A class without a comment is incomplete.
+
+### The `>>>` convention
+
+Class comments use `>>>` to show executable examples with return values.
+`>>> X` means "evaluating the preceding expression returns X." This is
+Pharo's Doctests convention — the value after `>>>` must be the actual
+printed representation of the return value, not a prose description.
+
+**Correct:**
+```
+  ClaudeClient apiKey: 'sk-ant-...'
+  >>> a ClaudeClient
+```
+
+**Wrong — prose label, not a return value:**
+```
+  Metacello new ... load.
+  >>> loads Postern-Core and Postern-Dashboard
+```
+
+If an expression has no meaningful return value (side-effect only, returns
+`nil`, or requires network access), use an inline comment instead:
+```
+  Metacello new
+    baseline: 'Postern';
+    repository: 'github://...';
+    load.
+  "Loads Postern-Core and Postern-Dashboard"
+```
+
+### Setting a comment
+
+Use `ClassName comment: '...'`. Do NOT redefine the class to change its
+comment — that triggers the class installer, fires deprecation warnings
+for old-style syntax, and can silently alter package metadata.
+
+```smalltalk
+MyClass comment: 'A one-sentence description.
+
+  MyClass new
+  >>> a MyClass
+'
+```
+
 ## Refactoring — use the RB engine
 
 Pharo has a full refactoring engine. Use it. Do not hand-edit method

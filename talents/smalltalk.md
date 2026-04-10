@@ -86,14 +86,38 @@ pattern for classes with many fields.
 
 ### Lint
 
-Use `critiques` API (same as System Browser). Never `rule check:` with
-`on: Error do:` — it swallows findings. Zero findings required.
+`make lint` from the Bash tool is the canonical gate. Zero non-clean
+lines required before any commit.
 
-```smalltalk
-| method |
-method := MyClass >> #myMethod.
-method critiques do: [:c | Transcript show: c rule name; cr ]
+```bash
+make lint 2>&1 | grep -v ': clean$' | grep -v '^$'
+# expected output: nothing
 ```
+
+`make lint` runs Renraku across all classes — including class-level
+rules (`Unused instance variable`, `Class not referenced`, etc.) that
+per-method `m critiques` does not see. Never use `m critiques` alone
+as the lint gate; it misses the class-level rules and has historically
+caused findings to slip past "lint clean" claims.
+
+The `critiques` API is a valid debugging tool for investigating a
+specific finding already identified via `make lint`. It is not the gate.
+
+### Class Comments
+
+Every class must have a comment. Use `ClassName comment: '...'` to set
+it — do NOT redefine the class. Comments must include at least one
+executable example using the `>>>` convention:
+
+```
+  ClassName new
+  >>> a ClassName
+```
+
+`>>> X` means "evaluating the preceding expression returns X." Use the
+actual printed representation. For side-effect-only expressions (no
+meaningful return value), use inline comments `"..."` instead of `>>>`.
+See the Beck personality for the full standard.
 
 ### Test Runs
 
