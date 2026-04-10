@@ -148,20 +148,23 @@ Pharo's Doctests convention — the value after `>>>` must be the actual
 printed representation of the return value, not a prose description.
 
 **Correct:**
-```
+
+```smalltalk
   ClaudeClient apiKey: 'sk-ant-...'
   >>> a ClaudeClient
 ```
 
 **Wrong — prose label, not a return value:**
-```
+
+```smalltalk
   Metacello new ... load.
   >>> loads Postern-Core and Postern-Dashboard
 ```
 
 If an expression has no meaningful return value (side-effect only, returns
 `nil`, or requires network access), use an inline comment instead:
-```
+
+```smalltalk
   Metacello new
     baseline: 'Postern';
     repository: 'github://...';

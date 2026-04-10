@@ -109,7 +109,7 @@ Every class must have a comment. Use `ClassName comment: '...'` to set
 it — do NOT redefine the class. Comments must include at least one
 executable example using the `>>>` convention:
 
-```
+```smalltalk
   ClassName new
   >>> a ClassName
 ```
