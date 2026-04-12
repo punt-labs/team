@@ -34,6 +34,28 @@ streams — they are the universal interface.
 - Quiet by default. Verbose on request (`-v`). Silent on success
   when the exit code tells the story.
 
+## Pipeline Composition
+
+Pipes are a composition mechanism, not just a transport mechanism.
+Each stage transforms input to output with a defined contract. The
+pipeline declares the stages; each stage is independent and
+replaceable. The power comes from the composition, not the
+individual stages.
+
+This principle applies beyond CLI commands. Any system of typed
+stages with defined input/output contracts benefits from pipeline
+composition:
+
+- Each stage does one thing (an archetype)
+- The output contract of stage N matches the input contract of N+1
+- Stages are independent — replace or reorder without rewriting
+- The pipeline is declared upfront, not discovered at runtime
+- Failure at any stage is visible and recoverable — the pipeline
+  knows which stage failed and what its input was
+
+Design pipelines the same way you design CLI pipes: start with the
+stages, define the interface between them, then compose.
+
 ## Code Style
 
 - Short functions that do one thing
