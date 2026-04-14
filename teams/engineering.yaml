@@ -27,6 +27,8 @@ members:
     role: python-specialist
   - identity: kwb
     role: smalltalk-specialist
+  - identity: kpz
+    role: ml-specialist
 collaborations:
   - from: coo
     to: ceo
@@ -47,5 +49,8 @@ collaborations:
     to: coo
     type: reports_to
   - from: smalltalk-specialist
+    to: coo
+    type: reports_to
+  - from: ml-specialist
     to: coo
     type: reports_to
