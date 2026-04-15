@@ -1,7 +1,0 @@
-name: Charm T
-handle: cht
-kind: agent
-personality: charm-tui
-writing_style: charm-docs
-talents:
-    - engineering
