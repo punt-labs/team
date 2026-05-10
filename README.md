@@ -12,27 +12,55 @@ agents.
 | **jfreeman** | Jim Freeman | human | principal-engineer | CEO | -- |
 | **claude** | Claude Agento | agent | friendly-direct | COO / VP Eng | L.L. Zamenhof |
 | **bwk** | Brian K | agent | kernighan | Go specialist | Brian Kernighan |
-| **mdm** | Doug M | agent | mcilroy | CLI specialist | Doug McIlroy |
+| **rsc** | Russ C | agent | cox | Go toolchain | Russ Cox |
 | **rmh** | Raymond H | agent | hettinger | Python specialist | Raymond Hettinger |
+| **gvr** | Guido R | agent | van-rossum | Python language design | Guido van Rossum |
+| **kwb** | Kent B | agent | beck | Smalltalk specialist | Kent Beck |
+| **rej** | Ralph J | agent | johnson | Smalltalk patterns | Ralph Johnson |
+| **csl** | Chris L | agent | lattner | Swift specialist | Chris Lattner |
+| **srn** | Steve N | agent | naroff | Swift platforms | Steve Naroff |
+| **bne** | Brendan E | agent | eich | Web (JavaScript) | Brendan Eich |
+| **ahj** | Anders H | agent | hejlsberg | Web (TypeScript) | Anders Hejlsberg |
+| **mdm** | Doug M | agent | mcilroy | CLI specialist | Doug McIlroy |
+| **rop** | Rob P | agent | pike | CLI minimalist | Rob Pike |
 | **djb** | Dan B | agent | bernstein | Security engineer | Dan Bernstein |
+| **bcs** | Bruce S | agent | schneier | Security architect | Bruce Schneier |
 | **adb** | Ada B | agent | lovelace | Infra engineer | Ada Lovelace |
+| **kth** | Kelsey H | agent | hightower | Cloud-native engineer | Kelsey Hightower |
+| **kpz** | Andrej K | agent | karpathy | ML specialist | Andrej Karpathy |
+| **ylc** | Yann L | agent | lecun | ML foundations | Yann LeCun |
+| **jms** | Mike S | agent | spivey | Z specialist | J. Michael Spivey |
+| **jra** | Jean-Raymond A | agent | abrial | B specialist | Jean-Raymond Abrial |
+| **edt** | Edward T | agent | tufte | UX designer | Edward Tufte |
+| **dna** | Don N | agent | norman | UX cognitive | Don Norman |
+| **mcg** | Marty C | agent | cagan | Product strategy | Marty Cagan |
+| **tdt** | Teresa T | agent | torres | Product discovery | Teresa Torres |
 | **adt** | Alan T | agent | turing | PM (grounding) | Alan Turing |
 | **ghr** | Grace H | agent | hopper | PM (building blocks) | Grace Hopper |
-| **edt** | Edward T | agent | tufte | UX designer | Edward Tufte |
 | **ach** | Alex H | agent | hamilton | Finance & ops | Alexander Hamilton |
 
 ## Teams
 
-**Engineering** -- ethos, biff, quarry, beadle, vox, lux, punt-kit, z-spec, prfaq, cryptd
+**Engineering** — ethos, biff, quarry, beadle, vox, lux, punt-kit, z-spec, prfaq, cryptd, refactory, mcp-proxy, postern, claude-agent-sdk-smalltalk, langlearn (and family), use-cases, reason-trace, dungeon, claude-plugins, homebrew-tap, team
+
+Two specialists per domain so worker and evaluator can always be distinct handles with no shared role.
 
 ```text
 jfreeman (CEO)
   └─ claude (COO)
-       ├─ bwk (Go specialist)
-       ├─ mdm (CLI specialist)
-       ├─ rmh (Python specialist)
-       ├─ djb (Security engineer)
-       └─ adb (Infra engineer)
+       ├─ Go            → bwk (specialist) + rsc (toolchain)
+       ├─ Python        → rmh (specialist) + gvr (language design)
+       ├─ Smalltalk     → kwb (specialist) + rej (patterns)
+       ├─ Swift         → csl (specialist) + srn (platforms)
+       ├─ Web           → bne (JavaScript) + ahj (TypeScript)
+       ├─ CLI           → mdm (specialist) + rop (minimalist)
+       ├─ Security      → djb (engineer)   + bcs (architect)
+       ├─ Infra         → adb (engineer)   + kth (cloud-native)
+       ├─ ML            → kpz (specialist) + ylc (foundations)
+       ├─ Formal methods → jms (Z)         + jra (B)
+       ├─ UX            → edt (designer)   + dna (cognitive)
+       ├─ Product       → mcg (strategy)   + tdt (discovery)
+       └─ Cross-cutting → adt (PM grounding), ghr (PM building blocks), ach (finance/ops)
 ```
 
 **Website** -- public-website

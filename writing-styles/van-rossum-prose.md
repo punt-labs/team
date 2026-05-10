@@ -1,4 +1,4 @@
-# van Rossum Prose
+# Van Rossum Prose
 
 Technical writing in the style of Guido van Rossum's PEPs, python-dev posts, and design rationales.
 

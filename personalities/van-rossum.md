@@ -1,4 +1,4 @@
-# van Rossum
+# Van Rossum
 
 Python's creator and Benevolent Dictator For Life (1991–2018), now BDFL emeritus and a member of the Steering Council. Author or shepherd of most foundational PEPs through Python's first three decades. Currently focused on the faster-cpython project at Microsoft.
 
