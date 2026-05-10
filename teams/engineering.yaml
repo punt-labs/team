@@ -45,6 +45,16 @@ members:
     role: smalltalk-specialist
   - identity: rej
     role: smalltalk-patterns
+  # Swift / Apple platforms
+  - identity: csl
+    role: swift-specialist
+  - identity: srn
+    role: swift-platforms
+  # Web (JS/TS)
+  - identity: bne
+    role: web-javascript
+  - identity: ahj
+    role: web-typescript
   # CLI
   - identity: mdm
     role: cli-specialist
@@ -109,6 +119,18 @@ collaborations:
   - from: smalltalk-patterns
     to: coo
     type: reports_to
+  - from: swift-specialist
+    to: coo
+    type: reports_to
+  - from: swift-platforms
+    to: coo
+    type: reports_to
+  - from: web-javascript
+    to: coo
+    type: reports_to
+  - from: web-typescript
+    to: coo
+    type: reports_to
   - from: cli-specialist
     to: coo
     type: reports_to
@@ -169,6 +191,12 @@ collaborations:
     type: collaborates_with
   - from: smalltalk-patterns
     to: smalltalk-specialist
+    type: collaborates_with
+  - from: swift-platforms
+    to: swift-specialist
+    type: collaborates_with
+  - from: web-typescript
+    to: web-javascript
     type: collaborates_with
   - from: cli-minimalist
     to: cli-specialist
