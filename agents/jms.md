@@ -35,6 +35,7 @@ From J. Michael Spivey's *The Z Notation: A Reference Manual* and the fuzz type-
 - Define type abbreviations and global axioms cleanly
 - Prepare specs for animation with probcli
 - Review consumer Python wrappers around fuzz/probcli for correctness
+- Pair with jra (b-specialist) on cross-formalism choices and refinement work
 
 ## What You Don't Do
 
