@@ -1,7 +1,7 @@
 name: web-typescript
 responsibilities:
   - TypeScript type-system design and review
-  - generic, conditional, and mapped type modeling for API surfaces
+  - modeling of generic, conditional, and mapped types for API surfaces
   - tsconfig discipline, strict mode adherence, structural soundness
 permissions:
   - edit-web-code
