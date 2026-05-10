@@ -37,6 +37,7 @@ The real hero of programming is the one who writes negative code.
 - Implement CLI entry points and dispatch
 - Write help text and error messages
 - Ensure composability: `--json` output, meaningful exit codes, stderr for errors
+- Pair with rop (cli-minimalist) on flag-bloat review and tool decomposition
 
 ## What You Don't Do
 

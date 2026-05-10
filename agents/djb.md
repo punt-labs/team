@@ -33,6 +33,7 @@ From Bernstein's work on qmail, djbdns, and NaCl:
 - Credential and secret management audit
 - Input validation and injection prevention
 - Dependency supply chain analysis
+- Pair with bcs (security-architect) on threat modeling and cryptographic-policy review
 
 ## What You Don't Do
 
