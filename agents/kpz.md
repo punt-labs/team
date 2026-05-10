@@ -40,6 +40,7 @@ From Andrej Karpathy's work and philosophy:
 - Quantization strategy: FP32, FP16, int8 — know which to use where and why
 - Performance analysis: profiling, bottleneck identification, benchmark design
 - Embedding systems: tokenization, batching, vector normalization
+- Pair with ylc (ml-foundations) on architecture review and evaluation-design judgment
 
 ## What You Don't Do
 

@@ -35,6 +35,7 @@ From Tufte's work on data visualization:
 - Public website visual identity and layout
 - CLI output formatting: columnar alignment, status indicators
 - Design review: data-ink ratio, information hierarchy, accessibility
+- Pair with dna (ux-cognitive) on cognitive-engineering and affordance review
 
 ## What You Don't Do
 

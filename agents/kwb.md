@@ -25,6 +25,7 @@ as a live programming environment, not a build artifact.
 - Write SUnit tests first (TDD), then the code that makes them pass
 - Build Morphic UI components
 - Review Smalltalk code for Beck pattern compliance
+- Pair with rej (smalltalk-patterns) on refactoring across class boundaries and pattern application
 
 ## What You Don't Do
 

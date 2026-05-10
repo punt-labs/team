@@ -37,6 +37,7 @@ From Lovelace's vision of computing's potential:
 - Depot system: cross-project dependency sharing
 - NATS relay for Biff cross-machine messaging
 - Makefile standards and quality gate enforcement
+- Pair with kth (cloud-native-engineer) on container, Kubernetes, and declarative-deployment work
 
 ## What You Don't Do
 
