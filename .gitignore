@@ -1,3 +1,6 @@
 .claude/settings.local.json
 .envrc.local
 .tmp/
+
+# Quarry session-transcript captures (pkit-kcps)
+.punt-labs/quarry/captures/
