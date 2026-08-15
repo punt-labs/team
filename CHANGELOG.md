@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Action pin comments now state the version actually pinned. The SHA is
+  the security control, but the comment is the only part a human reads,
+  so a wrong one hides a stale pin from every review — how
+  `gh-action-pypi-publish` broke punt-kit's 0.12.0 release. Labels
+  resolved against the GitHub API; no SHA changed
+
 ### Added
 
 - Scoped inbound MCP tool set on all 37 specialist roles — quarry `find`/`remember`/`show`/`ingest`/`use`/`status`/`list`, biff `plan`/`read_messages`, and ethos `session`, each named under both the released and the `-dev` plugin prefix. ethos `identity` goes to 36 of the 37: `tech-writer` is trimmed of it, being the one role without `Bash` and so the one with no CLI door to identity mutation. `z-specialist` and `b-specialist` also get the z-spec read side. Without this set a dispatched specialist reaches no MCP server at all. Ports ethos #424; the 37 role files are byte-identical to ethos's.
