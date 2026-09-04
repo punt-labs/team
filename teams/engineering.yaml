@@ -2,6 +2,7 @@ name: engineering
 repositories:
   - punt-labs/ethos
   - punt-labs/biff
+  - punt-labs/quarry
   - punt-labs/beadle
   - punt-labs/vox
   - punt-labs/lux
