@@ -11,6 +11,7 @@ agents.
 |--------|------|------|-------------|------|-------------|
 | **jfreeman** | Jim Freeman | human | principal-engineer | CEO | -- |
 | **claude** | Claude Agento | agent | friendly-direct | COO / VP Eng | L.L. Zamenhof |
+| **devin** | Devin AI | agent | friendly-direct | -- | -- |
 | **bwk** | Brian K | agent | kernighan | Go specialist | Brian Kernighan |
 | **rsc** | Russ C | agent | cox | Go toolchain | Russ Cox |
 | **rmh** | Raymond H | agent | hettinger | Python specialist | Raymond Hettinger |

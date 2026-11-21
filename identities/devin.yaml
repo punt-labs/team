@@ -1,0 +1,9 @@
+name: Devin AI
+handle: devin
+kind: agent
+email: '158243242+devin-ai-integration[bot]@users.noreply.github.com'
+github: 'devin-ai-integration[bot]'
+writing_style: direct-with-quips
+personality: friendly-direct
+talents:
+    - engineering
